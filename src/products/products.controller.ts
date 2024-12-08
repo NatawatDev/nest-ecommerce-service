@@ -1,6 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Query, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer'
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -12,10 +11,7 @@ export class ProductsController {
 
   @Post()
   @UseInterceptors( FileInterceptor('file', fileUploadOptions) )
-  async create(
-    @Body() createProductDto: CreateProductDto,
-    @UploadedFile() file: Express.Multer.File, 
-  ) {
+  create(@Body() createProductDto: CreateProductDto, @UploadedFile() file: Express.Multer.File) {
     return this.productsService.create(createProductDto, file)
   }
 
