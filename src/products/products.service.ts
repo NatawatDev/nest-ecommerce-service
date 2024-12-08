@@ -23,7 +23,7 @@ export class ProductsService {
       const result = new this.productModel({...createProductDto, imageUrl});
       return await result.save();
     } catch (error) {
-      throw error;
+      throw error
     }
   }
 
@@ -61,7 +61,7 @@ export class ProductsService {
 
   async update(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
     try {
-      const updatedProduct = await this.productModel.findByIdAndUpdate(id, updateProductDto , { new: true }).exec()
+      const updatedProduct = await this.productModel.findByIdAndUpdate(id, { ...updateProductDto, updatedAt: new Date } , { new: true }).exec()
       if (!updatedProduct) {
         throw new NotFoundException('Product not found for update.')
       }
@@ -69,5 +69,17 @@ export class ProductsService {
     } catch (error) {
       throw error
     }    
+  }
+
+  async remove(id: string) {
+    try {
+      const deletedProduct = await this.productModel.findByIdAndDelete(id).exec()
+      if (!deletedProduct) {
+        throw new NotFoundException('Product not found for delete.')
+      }
+      return { message: 'Delete successful' }
+    } catch (error) {
+      throw error
+    }
   }
 }
