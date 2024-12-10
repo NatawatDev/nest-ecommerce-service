@@ -78,7 +78,6 @@ export class BannersService {
       if (!banner) {
         throw new NotFoundException('Not found banner.')
       }
-
       if (!file) {
         imageUrl = banner.imageUrl
       } else {
