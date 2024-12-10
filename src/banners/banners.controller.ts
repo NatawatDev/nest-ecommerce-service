@@ -28,7 +28,7 @@ export class BannersController {
 
   @Put(':id')
   @UseInterceptors(FileInterceptor('file', fileUploadOptions))
-  update(@Param('id') id: string, @Body() updateBannerDto: UpdateBannerDto, file: Express.Multer.File) {
+  update(@Param('id') id: string, @Body() updateBannerDto: UpdateBannerDto, @UploadedFile() file: Express.Multer.File) {
     return this.bannersService.update(id, updateBannerDto, file)
   }
   

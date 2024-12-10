@@ -29,7 +29,7 @@ export class ProductsService {
 
   async findAll(limit: number = 10, offset: number = 0): Promise<Product[]> {
     try {      
-      const productList = await this.productModel.find().limit(limit).skip(offset).exec()
+      const productList = await this.productModel.find().limit(limit).skip(offset).select('name price imageUrl').exec()
       return productList || []
     } catch (error) {
       throw error
@@ -59,9 +59,13 @@ export class ProductsService {
     }
   }
 
-  async update(id: string, updateProductDto: UpdateProductDto): Promise<Product> {
+  async update(id: string, updateProductDto: UpdateProductDto, file:Express.Multer.File): Promise<Product> {
     try {
-      const updatedProduct = await this.productModel.findByIdAndUpdate(id, { ...updateProductDto, updatedAt: new Date } , { new: true }).exec()
+      let imageUrl = ''
+      if (file) {
+        imageUrl = await this.cloudinaryService.uploadImage(file, fileProductFolder)  
+      }
+      const updatedProduct = await this.productModel.findByIdAndUpdate(id, { ...updateProductDto, ...(imageUrl && { imageUrl }), updatedAt: new Date } , { new: true }).exec()
       if (!updatedProduct) {
         throw new NotFoundException('Product not found for update.')
       }
