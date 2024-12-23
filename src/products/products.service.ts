@@ -15,7 +15,7 @@ export class ProductsService {
   
   async create(createProductDto: CreateProductDto, file: Express.Multer.File): Promise<Product> {
     try {
-      let imageUrl = ''
+      let imageUrl = null
       if (file) {
         imageUrl = await this.cloudinaryService.uploadImage(file, fileProductFolder)  
       }
@@ -48,14 +48,15 @@ export class ProductsService {
     }    
   }
 
-  async searchByName(name: string): Promise<Product[]> {
+  async searchByName(name: string) {
     try {
       const productList = await this.productModel
-      .find({ name: { $regex: name, $options: 'i' } })
-      .exec()
-      return productList || []
+        .find({ name: { $regex: name, $options: 'i' } })
+        .exec();
+      return productList || [];
     } catch (error) {
-      throw error
+      console.error(error);
+      throw new Error('Failed to fetch products');
     }
   }
 

@@ -20,7 +20,7 @@ export class BannersService {
         throw new BadRequestException('Cannot create more than 3 banners')
       }
   
-      let imageUrl = ''
+      let imageUrl = null
       if (file) {
         imageUrl = await this.cloudinaryService.uploadImage(file, fileBannerFolder)
       }
