@@ -25,8 +25,8 @@ export class ProductsController {
     return this.productsService.findOne(id);
   }
 
-  @Get('search')
-  searchByName(@Query('name') name: string) {
+  @Get('search/:name')
+  findByName(@Param('name') name: string) {
     return this.productsService.searchByName(name)
   }
 
